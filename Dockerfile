@@ -18,8 +18,8 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w -extldflags=-static" -v -o cloud-run-
 # Use the official Debian slim image for a lean production container.
 # https://hub.docker.com/_/debian
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM debian:bullseye-slim
-# RUN useradd -ms /bin/bash run-proxy
+FROM nginx:1.23.3
+ENTRYPOINT ["/app/run.sh"]
 
 RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install sudo -y \
     ca-certificates nginx apache2-utils && \
@@ -29,4 +29,3 @@ COPY ./docker-deps/default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker-deps/nginx.conf /etc/nginx/nginx.conf
 # Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/cloud-run-proxy /app/cloud-run-proxy
-ENTRYPOINT ["/app/run.sh]
