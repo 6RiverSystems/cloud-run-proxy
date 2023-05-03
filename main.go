@@ -248,6 +248,16 @@ func buildProxy(host, bind *url.URL, tokenSource oauth2.TokenSource) *httputil.R
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	proxy.Transport = &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).DialContext,
+		DisableKeepAlives:   false,
+		MaxIdleConns:        300,
+		MaxIdleConnsPerHost: 0,
+	}
+
 	return proxy
 }
 
