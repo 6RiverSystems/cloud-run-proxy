@@ -6,5 +6,5 @@
 # htpasswd for basic authentication
 htpasswd -c -b /etc/nginx/.htpasswd "$BASIC_USERNAME" "$BASIC_PASSWORD"
 
-sudo -u www-data /app/cloud-run-proxy "$@" &
+/app/cloud-run-proxy "$@" &
 nginx -g "daemon off;" 
