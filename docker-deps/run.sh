@@ -6,5 +6,7 @@
 # htpasswd for basic authentication
 htpasswd -c -b /etc/nginx/.htpasswd "$BASIC_USERNAME" "$BASIC_PASSWORD"
 
-/app/cloud-run-proxy "$@" &
+sleep 10 #Wait for metatdata server to be avaliable 
+echo "Running: /app/cloud-run-proxy $@"
+sudo -u www-data /app/cloud-run-proxy "$@" &
 nginx -g "daemon off;" 
